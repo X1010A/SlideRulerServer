@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slide_ruler_sever/views/connetionIP.dart';
+import 'package:slide_ruler_sever/views/connetion.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -8,9 +8,10 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'SlideRulerServer',
         theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
+          primarySwatch: Colors.blue,
         ),
         home: ConnectionServer());
   }
