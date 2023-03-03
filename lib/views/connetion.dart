@@ -1,62 +1,104 @@
-// import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
-// import 'package:socket_io/socket_io.dart';
 
 class ConnectionServer extends StatefulWidget {
   const ConnectionServer({super.key});
+
   @override
   State<ConnectionServer> createState() => _ConnectionServerState();
 }
 
 class _ConnectionServerState extends State<ConnectionServer> {
-  int _counter = 0;
+  List<String> names = ['gary', 'juan', 'roberto'];
+  List<String> net = [];
+  List<String> direct = [];
+  @override
+  void initState() {
+    super.initState();
+    ips();
+  }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
+  void ips() {
+    var interfaces = NetworkInterface.list();
+    interfaces.then((list) {
+      list.forEach((interface) {
+        interface.addresses.forEach((direciones) {
+          if (direciones.type == InternetAddressType.IPv4) {
+            setState(() {
+              net.add('${interface.name}: ${direciones.address}');
+              direct.add(direciones.address);
+              print(direct);
+            });
+          }
+        });
+      });
+    });
+  }
+
+  void conexion() async {
+    final server = await ServerSocket.bind('192.168.1.3', 1782);
+    print('Servidor escuchando en ${server.address}:${server.port}');
+
+    server.listen((client) {
+      print(
+          'Cliente conectado desde ${client.remoteAddress}:${client.remotePort}');
+
+      client.write('Hola, cliente');
+      client.listen((data) {
+        print('Mensaje recibido del cliente: ${String.fromCharCodes(data)}');
+      }, onDone: () {
+        print('Cliente desconectado');
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 300,
-        title: Text("Slide Ruler"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("Servidor conectalo plis"),
-            // OutlinedButton(onPressed: _conexion, child: const Text("conectar"))
-          ],
+        appBar: AppBar(
+          title: const Text("Slide Ruler"),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        body: Center(
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ElevatedButton(
+                  child: const Text('Iniar Servidor'),
+                  onPressed: () {
+                    print('hooa');
+                  },
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text('Estado del servidor'),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text('Entradas'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  child: ListView.builder(
+                    itemCount: net.length,
+                    itemBuilder: (context, index) {
+                      final name = net[index];
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(name),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }
-
-/* void _conexion() {
-  final server = Server();
-  print("hola");
-  server.on('connection', (client) {
-    print('$client esta conectado');
-
-    client.on('stream', (data) {
-      print('datos del clietne $data');
-    });
-
-    Timer(Duration(seconds: 5), () {
-      client.emit('msg', 'hola al servidor');
-    });
-  });
-  server.listen(1782);
-  print("1782");
-}
- */
