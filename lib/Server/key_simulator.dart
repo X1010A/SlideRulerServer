@@ -1,4 +1,46 @@
 import 'dart:ffi';
+import 'package:ffi/ffi.dart';
+import 'package:win32/win32.dart';
+export 'package:slide_ruler_sever/Server/key_simulator.dart'
+    show
+        key_eventUP_windows,
+        key_eventDown_windows,
+        key_eventRigth_windows,
+        key_eventLeft_windows;
+
+typedef KeybdEventC = Void Function(Uint8, Uint8, Uint32, IntPtr);
+typedef KeybdEventDart = void Function(int, int, int, int);
+
+final user32 = DynamicLibrary.open('user32.dll');
+
+final keybd_event = user32.lookupFunction<KeybdEventC, KeybdEventDart>(
+  'keybd_event',
+);
+
+void main() {
+  // Simula la pulsación de la tecla "a"
+  keybd_event(0x42, 0, KEYEVENTF_EXTENDEDKEY, 0);
+  keybd_event(0x42, 0, KEYEVENTF_KEYUP, 0);
+}
+
+void key_eventUP_windows() {
+  keybd_event(VK_UP, 0, KEYEVENTF_EXTENDEDKEY, 0);
+}
+
+void key_eventDown_windows() {
+  keybd_event(VK_DOWN, 0, KEYEVENTF_EXTENDEDKEY, 0);
+}
+
+void key_eventRigth_windows() {
+  keybd_event(VK_RIGHT, 0, KEYEVENTF_EXTENDEDKEY, 0);
+}
+
+void key_eventLeft_windows() {
+  keybd_event(VK_LEFT, 0, KEYEVENTF_EXTENDEDKEY, 0);
+}
+
+/* 
+import 'dart:ffi';
 import 'dart:io';
 
 final DynamicLibrary user32 = Platform.isWindows
@@ -61,7 +103,7 @@ void main() async {
 
 
 
-/* 
+
 
 install xdotool
 para linux

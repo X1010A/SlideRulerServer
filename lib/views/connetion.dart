@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:core';
+import 'package:slide_ruler_sever/Server/key_simulator.dart';
 
 class ConnectionServer extends StatefulWidget {
   const ConnectionServer({super.key});
@@ -17,7 +18,6 @@ class _ConnectionServerState extends State<ConnectionServer> {
   String cliente = '';
   String inputCliente = '';
   Widget? _widget;
-
   late final server;
   final keyForm = GlobalKey<FormState>();
   @override
@@ -66,8 +66,17 @@ class _ConnectionServerState extends State<ConnectionServer> {
         client.listen((data) {
           print('Mensaje recibido del cliente: ${String.fromCharCodes(data)}');
           setState(() {
-            inputCliente =
-                'Mensaje recibido del cliente: ${String.fromCharCodes(data)}';
+            inputCliente = 'Mensaje reccliente: ${String.fromCharCodes(data)}';
+            String aux = String.fromCharCodes(data);
+            if (aux == 'down') {
+              key_eventDown_windows();
+            } else if (aux == 'up') {
+              key_eventUP_windows();
+            } else if (aux == 'rigth') {
+              key_eventRigth_windows();
+            } else if (aux == 'left') {
+              key_eventLeft_windows();
+            }
           });
         }, onDone: () {
           print('Cliente desconectado');
