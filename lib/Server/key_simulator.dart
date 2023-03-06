@@ -1,6 +1,6 @@
 import 'dart:ffi';
-import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
+import 'dart:io';
 export 'package:slide_ruler_sever/Server/key_simulator.dart'
     show
         key_eventUP_windows,
@@ -16,12 +16,6 @@ final user32 = DynamicLibrary.open('user32.dll');
 final keybd_event = user32.lookupFunction<KeybdEventC, KeybdEventDart>(
   'keybd_event',
 );
-
-void main() {
-  // Simula la pulsación de la tecla "a"
-  keybd_event(0x42, 0, KEYEVENTF_EXTENDEDKEY, 0);
-  keybd_event(0x42, 0, KEYEVENTF_KEYUP, 0);
-}
 
 void key_eventUP_windows() {
   keybd_event(VK_UP, 0, KEYEVENTF_EXTENDEDKEY, 0);
@@ -39,6 +33,14 @@ void key_eventLeft_windows() {
   keybd_event(VK_LEFT, 0, KEYEVENTF_EXTENDEDKEY, 0);
 }
 
+void key_eventUP_Linux() {
+  // Ejecutar el comando xdotool para enviar la tecla "a"
+  Process.run('xdotool', ['key', 'a']).then((ProcessResult result) {
+    // Manejar el resultado de la ejecución del comando
+    print(result.stdout);
+    print(result.stderr);
+  });
+}
 /* 
 import 'dart:ffi';
 import 'dart:io';
@@ -117,7 +119,7 @@ void main() {
     print(result.stderr);
   });
 
-
+}
 
 para windows 
 
