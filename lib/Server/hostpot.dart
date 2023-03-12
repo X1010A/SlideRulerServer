@@ -1,5 +1,4 @@
-import 'dart:ffi' as ffi;
-import 'dart:io';
+/* import 'dart:ffi' as ffi;
 
 typedef WlanOpenHandleC = ffi.Int32 Function(
     ffi.Uint32, ffi.Pointer<ffi.Void>, ffi.Uint32, ffi.Pointer<ffi.Void>);
@@ -264,4 +263,4 @@ void main() {
   // Liberar recursos
   free(wlanHostedNetworkParams.hostedNetworkSSID);
   WlanCloseHandle(hClient.value, nullptr);
-} */ */
+} */ */ */
