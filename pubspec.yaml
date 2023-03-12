@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   window_manager: ^0.3.0
   win32: ^4.1.1
+  custom_qr_generator: ^0.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

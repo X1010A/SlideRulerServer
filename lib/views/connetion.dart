@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:core';
 import 'package:slide_ruler_sever/Server/key_simulator.dart';
 
+import '../Server/QR_generator.dart';
+
 class ConnectionServer extends StatefulWidget {
   const ConnectionServer({super.key});
 
@@ -101,10 +103,11 @@ class _ConnectionServerState extends State<ConnectionServer> {
       ),
       body: Form(
         key: keyForm,
-        child: Center(
-          child: ListView(
-            children: <Widget>[
-              Padding(
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Center(child: QRgenerator()),
+            /*   Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: TextFormField(
                   decoration: const InputDecoration(
@@ -130,58 +133,59 @@ class _ConnectionServerState extends State<ConnectionServer> {
                     return null;
                   },
                 ),
+              ), */
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 15,
+                ),
+                ElevatedButton(
+                  child: const Text('Iniar Servidor'),
+                  onPressed: () {
+                    _changeState();
+                  },
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                if (_widget != null) _widget!,
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                status,
               ),
-              Row(
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
                 children: [
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  ElevatedButton(
-                    child: const Text('Iniar Servidor'),
-                    onPressed: () {
-                      _changeState();
-                    },
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  if (_widget != null) _widget!,
+                  Text(cliente),
+                  Text(inputCliente),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  status,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                width: 100,
+                height: 100,
+                child: ListView.builder(
+                  itemCount: net.length,
+                  itemBuilder: (context, index) {
+                    final name = net[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(name),
+                    );
+                  },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Text(cliente),
-                    Text(inputCliente),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  child: ListView.builder(
-                    itemCount: net.length,
-                    itemBuilder: (context, index) {
-                      final name = net[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text(name),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
